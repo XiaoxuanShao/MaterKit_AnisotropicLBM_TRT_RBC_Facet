@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<cfsmode>
+    <flowfield> true </flowfield>
+    <particles> false </particles>
+</cfsmode>
+
+<geometry>
+    <!--  meshfilename channel_Ishape_section0  channel_expansion -->
+    <mesh> ./channel_Ishape_section0.stl000 </mesh>
+    <!-- scaling is 1.0e-9, 1.0e-6, 1.0e-3, 1.0, 1.0e3..., 1.0e-3 means scaling-down  -->
+    <scaling> 1.0e-6 </scaling>
+	<!-- manual setup lx ly lz (maximum meshes in x y z direction, m) -->
+	<lxlylz> 1.0e-0  15.625e-3   1.0e-0  </lxlylz>	<!-- 32.0e-6  2.5e-6  32.0e-6 -->
+    <!-- Inlet diameter (m). This parameter has no impact on the simulation, 
+         and is only used to display the Reynolds number. -->
+    <inletDiameter> 4.0e-5 </inletDiameter>
+    <!-- Average inlet velocity in physical units (m/s). -->
+    <averageInletVelocity> 0.0 </averageInletVelocity>
+    <!-- inlet velocity in physical units (m/s). -->
+    <velocityInlet> 0.0    0.0   0.0 </velocityInlet>
+    <!-- inlet density. pressure = density/cs_squ -->
+    <densityInlet>  1.0 </densityInlet>
+    <!-- outlet density. pressure = density/cs_squ -->
+    <densityOutlet> 1.0 </densityOutlet>
+    <!-- acceleration in physical units (m^2/s). -->
+    <acceleration> 0.0    0.0    -1.0 </acceleration>	
+	
+	<!-- The channelTypename. Periodic, PeriodicX, Incoming, Poiseuille,Couette,Toplid,Enclosed,QuaterShear,DeanCircle... -->
+	<channelName> Toplid </channelName>
+	
+	<!-- When using the DeanCircle channel, the following parameters work. -->
+	<DeanCircle> 
+		<radius> 25  </radius>  <!-- radius of the inner circle, in lattice unit -->
+		<width>  25  </width>   <!-- width of the Dean channel, in lattice unit -->
+	</DeanCircle>	
+	
+	<!-- The boundary condition at walls (including inlets and outlets). 
+	Periodic,Velocity,Pressure,QuaterShear,Couette,Solidwalls,SFieldConstant ... -->
+	<boundary> Couette  </boundary>
+	
+    <!-- The STL geometry provided by the user has openings (inlets and outlets).
+         It must not be provided by the user closed. -->
+    <openings>
+        <!-- 0 means x-direction, 1 means y-direction and 2 means z-direction. -->
+        <sortDirection> 0 </sortDirection>
+        <!-- According to the sortDirection, the user provides which openings are inlets and which are outlets. -->
+        <!-- <type> Inlet Outlet</type> -->
+        <type> Inlet Outlet </type> 
+    </openings>
+</geometry>
+
+<numerics>
+    <!-- The referenceDirection is used for the resolution.
+         0 means x-direction, 1 means y-direction and 2 means z-direction. -->
+    <referenceDirection> 0 </referenceDirection>
+    <!-- The reference resolution is the resolution at the grid. -->
+    <referenceResolution> 64 </referenceResolution>
+    <!-- The time step can be adjusted by setting omega. -->
+    <!-- It is better to keep (0.1<=omega<=1.9999). -->
+    <!-- The omega will be ignored at timestep > 0. -->
+    <omega> 1.995 </omega>
+    <timestep> 0.66666666666666667e-001 </timestep>
+</numerics>
+
+<output>
+    <!-- The maximum number of iteration loops. -->
+    <numLoops>  100000 </numLoops>
+    <!-- The maximum number of output file frames. -->
+    <numFrames> 500 </numFrames>
+	<checkDensity>
+	  	<positionA> 1   0   1</positionA>
+	  	<positionB> 5   0   5</positionB>
+	</checkDensity>	
+</output>
+
+<!-- All fluid properties are given in physical units. -->
+<fluid>
+	<!-- 5.65657e-7=1.4e-3/2475.0 for Al-3.0wt%Cu, m^2/s -->
+    <kinematicViscosity> 3.0e-6 </kinematicViscosity>
+    <density> 1.0 </density>
+</fluid>
+
+
+<temperature>
+    <alphaFluid> 4.0 </alphaFluid>  <!-- 1.40845e-6 -->
+    <alphaSolid> 4.0 </alphaSolid>  <!-- 1.40845e-6 -->
+    <!-- expanding coefficient, 1/K -->
+    <beta> 11.25e-6 </beta>  <!-- 1.0e-4 --> 
+    <Ave>  301.65  </Ave> <!-- 925.0 -->
+    <Hot>  302.65  </Hot> <!-- 900.0 311.15 -->
+    <Cold> 301.65  </Cold><!-- 920.0 -->
+</temperature>
+
+<components>
+	<number> 1 </number>
+    <diffFluid> 1.0e-9   3.0e-9    5.286e-9  5.286e-9  0.785e-9  0.785e-9  2.033e-9  0.427e-9 </diffFluid>
+    <diffSolid> 1.0e-12   3.0e-12   3.0e-15   3.0e-15   3.0e-15   3.0e-15   3.0e-15   3.0e-15  </diffSolid>
+    <valency> 1.0   1.0    -1.0     0.0      1.0      -1.0      0.0 </valency>  <!-- 1,2,3 -->
+    <beta>0e0   1.0e-3     1.0e-3   1.0e-3   1.0e-3   1.0e-3    1.0e-3 </beta>  <!-- expanding coefficients; 9.44822  for 64*32 RBC Ra=1.0E4-->    
+    <init>-0.55    5.0   7.943e-3   1.259    515.0    485.0    485.0     5.0 </init>  <!-- initial concentrations 925.0 C=C/1.0e-6mol/L-->
+    <high>-0.05    6.0   7.943e-3   1.259    515.0    485.0    485.0     5.0 </high> <!-- 900.0 -->
+    <low> -1.05    4.0   7.943e-3   1.259    515.0    485.0    485.0     5.0 </low>  <!-- 920.0 -->
+    <!-- equlibrium composition, i.e. liquidus concentration value -->
+    <equ> 1.0  3.0  5.0  </equ>  
+</components>
+
+<phaseChange>
+	<numerics>
+		<!-- dt_ratio = dt_growth/delta_t  16  -->
+		<timestepratio> 1 </timestepratio>
+		<!-- global phase fraction (wt%) to terminate the main loops -->
+		<globalPhaseFraction>  102.0 </globalPhaseFraction>
+		<!-- global phase fraction (wt%) to output frame files -->
+		<globalPhaseIncrement> 0.20 </globalPhaseIncrement>
+	</numerics>
+    <!-- d_H = 3.920e5, 8.016e4   fusion latent heat of Al (J/kg)392000  -->
+    <latentHeat> 30000 </latentHeat>    
+    <!-- c_p = 1.042e3, 3.815e2   specific heat of solid Al (J/kg/K)  -->
+    <specificHeat> 300 </specificHeat>
+    <!-- composition partial coefficient: 0.17 for solute;  1.0  0.1  0.10  1.0 for thermal -->
+    <compositionPartial> 1.00  </compositionPartial>  
+    <anisotropy> 
+    	<aisv>  0.30  </aisv> <!-- 0.30  -->
+    	<aiss>  0.02  </aiss> <!-- 0.02  -->
+    </anisotropy>
+    <fusionTemperature> 301.65 </fusionTemperature>	 <!-- 302.922638 -->
+    <liquiduSlope> -2.6 </liquiduSlope>  <!-- -2.6; K/at%, K/wt% --> 
+	<eutecticComposition> 100.77 </eutecticComposition>  <!-- 10.77 -->
+    <!-- growth coefficient, m s^{-1}K^{-1}. It's better to have beta <0.1, 0.002, 0.008, 0.080, 0.200, (tip splited) -->
+    <beta> 2.0e-3     0.0      0.0 </beta> <!-- 0.0     2.90e-6      1.49e-6 -->
+    <GibbsThompson> 2.36e-7 </GibbsThompson>   <!-- 2.36e-7 -->
+    <iniComposition>  3.0 </iniComposition>  
+    <iniUndercooling> 3.0 </iniUndercooling>   <!-- d_T0 = 3.0 --> 
+    <directionalSolidification>
+    <!-- used in directional solidification, 0~2.2e-4; 2.0e-4 m/s--> 
+		<pullingRate> 0.0    0.0  -00.0e-6 </pullingRate> 
+    <!-- used in directional solidification,0~5.6e3; 5.0e3 K/m--> 
+    	<temperatureGradientHotend>  0.0   0.0 -00.0e3 </temperatureGradientHotend> 
+    	<temperatureGradientColdend> 0.0   0.0  00.0e3 </temperatureGradientColdend> 
+    	<!-- extend cooling rate at the cold position, 2.0 K/s -->
+    	<extendCoolingRate> 00.0 </extendCoolingRate>
+    </directionalSolidification>
+    <!-- seed positions --> 
+    <seed> 
+    	<number> 1 </number>
+    	<!-- center is in lattice unit. -->
+    	<center>    
+			50.0    0.0  50.0        22.5    2.0  13.5     42.5    2.0  20.5 	  42.5   2.0   13.5 	
+			22.5    2.0    5.5     42.5    2.0   5.5
+    		33.6   26.5    3.5     62.0   50.5   3.5     90.0   73.5   3.5 
+			30.0   72.5    3.5     38.0   82.5   3.5     85.0   83.5   3.5     
+			15.0   48.5    3.5     51.0   63.5   3.5     71.0   53.5   3.5   
+			 6.0   23.5    3.5     40.0   11.5   3.5     68.0   10.0   3.5      65    0    65	
+    	</center>
+    	<prefer>
+    		1 0 0   1 0 0   1 0 0    1 0 0   1 0 0   1 0 0   1 0 0   1 0 0
+    	</prefer>
+    </seed> 
+	<!-- The boundary layer width. Dendrites won't grow in the boundary layer. 
+	BdyWidthWest, BdyWidthEast, BdyWidthSouth, BdyWidthNorth, BdyWidthBottom, BdyWidthTop -->
+	<boundaryLayerWidth> 0   0    0   0    0   0 </boundaryLayerWidth>
+	
+	<precipitation>
+		<phaseName> alpha </phaseName>
+	</precipitation>	
+</phaseChange>
+
